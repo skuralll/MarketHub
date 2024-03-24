@@ -1,14 +1,18 @@
 package com.skuralll.markethub
 
+import com.skuralll.markethub.command.CommandRegister
+import dev.jorel.commandapi.CommandAPI
+import dev.jorel.commandapi.kotlindsl.commandAPICommand
+import dev.jorel.commandapi.kotlindsl.playerExecutor
 import org.bukkit.plugin.java.JavaPlugin
 
 class MarketHub : JavaPlugin() {
     override fun onEnable() {
-        // Plugin startup logic
-        logger.info("MarketHub enabled")
+        CommandAPI.onEnable()
+        CommandRegister.registerCommands()
     }
 
     override fun onDisable() {
-        // Plugin shutdown logic
+        CommandAPI.onDisable()
     }
 }

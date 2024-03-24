@@ -13,6 +13,7 @@ repositories {
 
 dependencies {
     implementation(kotlin("stdlib"))
+    implementation("dev.jorel:commandapi-bukkit-kotlin:9.3.0")
     compileOnly("io.papermc.paper:paper-api:1.20.4-R0.1-SNAPSHOT")
     compileOnly("dev.jorel:commandapi-bukkit-core:9.3.0")
 }
