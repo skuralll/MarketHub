@@ -9,6 +9,7 @@ repositories {
     mavenCentral()
     maven("https://papermc.io/repo/repository/maven-public/")
     maven("https://repo.codemc.org/repository/maven-public/")
+    maven("https://repo.xenondevs.xyz/releases")
 }
 
 dependencies {
@@ -16,6 +17,8 @@ dependencies {
     implementation("dev.jorel:commandapi-bukkit-kotlin:9.3.0")
     compileOnly("io.papermc.paper:paper-api:1.20.4-R0.1-SNAPSHOT")
     compileOnly("dev.jorel:commandapi-bukkit-core:9.3.0")
+    implementation("xyz.xenondevs.invui:invui:1.26")
+    implementation("xyz.xenondevs.invui:invui-kotlin:1.26")
 }
 
 java.toolchain.languageVersion.set(JavaLanguageVersion.of(17))
