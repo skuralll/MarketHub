@@ -13,13 +13,23 @@ repositories {
     maven("https://repo.xenondevs.xyz/releases")
 }
 
+val exposedVersion: String by project
 dependencies {
     implementation(kotlin("stdlib"))
-    implementation("dev.jorel:commandapi-bukkit-kotlin:9.3.0")
     compileOnly("io.papermc.paper:paper-api:1.20.4-R0.1-SNAPSHOT")
+    // Command API
+    implementation("dev.jorel:commandapi-bukkit-kotlin:9.3.0")
     compileOnly("dev.jorel:commandapi-bukkit-core:9.3.0")
+    // InventoryUI API
     implementation("xyz.xenondevs.invui:invui:1.26")
     implementation("xyz.xenondevs.invui:invui-kotlin:1.26")
+    // Exposed (ORM)
+    implementation("org.jetbrains.exposed:exposed-core:$exposedVersion")
+    implementation("org.jetbrains.exposed:exposed-dao:$exposedVersion")
+    implementation("org.jetbrains.exposed:exposed-jdbc:$exposedVersion")
+    implementation("org.jetbrains.exposed:exposed-java-time:$exposedVersion")
+    // MySQL Connector
+    implementation("mysql:mysql-connector-java:8.0.33")
 }
 
 java.toolchain.languageVersion.set(JavaLanguageVersion.of(17))
