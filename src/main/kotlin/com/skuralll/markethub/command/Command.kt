@@ -1,5 +1,5 @@
 package com.skuralll.markethub.command
 
-interface Command {
-    fun register()
+abstract class Command {
+    abstract fun register()
 }
