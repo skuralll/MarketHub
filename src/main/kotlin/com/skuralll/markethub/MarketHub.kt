@@ -1,10 +1,9 @@
 package com.skuralll.markethub
 
 import com.skuralll.markethub.command.CommandRegister
+import com.skuralll.markethub.db.DBHandler
 import dev.jorel.commandapi.CommandAPI
 import dev.jorel.commandapi.CommandAPIBukkitConfig
-import dev.jorel.commandapi.kotlindsl.commandAPICommand
-import dev.jorel.commandapi.kotlindsl.playerExecutor
 import org.bukkit.plugin.java.JavaPlugin
 
 class MarketHub : JavaPlugin() {
@@ -14,8 +13,11 @@ class MarketHub : JavaPlugin() {
     }
 
     override fun onEnable() {
+        // Register commands
         CommandAPI.onEnable()
-        CommandRegister.registerCommands()
+        CommandRegister.registerCommands(this)
+        // DB init
+        DBHandler.connect(this)
     }
 
     override fun onDisable() {

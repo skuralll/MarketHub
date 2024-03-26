@@ -1,14 +1,13 @@
 package com.skuralll.markethub.command;
 
+import com.skuralll.markethub.MarketHub
+
 public object CommandRegister {
 
     private var commands = mutableListOf<Command>()
 
-    init {
-        commands.add(TestCommand())
-    }
-
-    fun registerCommands() {
+    fun registerCommands(plugin: MarketHub) {
+        commands.add(TestCommand(plugin))
         commands.forEach { it.register() }
     }
 
