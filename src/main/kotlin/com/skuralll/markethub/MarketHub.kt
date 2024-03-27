@@ -18,6 +18,8 @@ class MarketHub : JavaPlugin() {
         CommandRegister.registerCommands(this)
         // DB init
         DBHandler.connect(this)
+        // Market init
+        Market.open(this)
     }
 
     override fun onDisable() {

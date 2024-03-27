@@ -8,6 +8,7 @@ public object CommandRegister {
 
     fun registerCommands(plugin: MarketHub) {
         commands.add(TestCommand(plugin))
+        commands.add(MHubCommand(plugin))
         commands.forEach { it.register() }
     }
 

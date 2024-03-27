@@ -5,7 +5,7 @@ import org.jetbrains.exposed.sql.javatime.datetime
 
 object ProductsTable : Table("products") {
     val id = integer("id").autoIncrement()
-    val seller_id = varchar("seller_id", 32)
+    val seller_id = varchar("seller_id", 36)
     val seller_name = varchar("seller_name", 16)
     val quantity = integer("quantity")
     val item_stack = text("item_stack")

@@ -11,6 +11,7 @@ repositories {
     maven("https://papermc.io/repo/repository/maven-public/")
     maven("https://repo.codemc.org/repository/maven-public/")
     maven("https://repo.xenondevs.xyz/releases")
+    maven("https://jitpack.io")
 }
 
 val exposedVersion: String by project
@@ -30,6 +31,12 @@ dependencies {
     implementation("org.jetbrains.exposed:exposed-java-time:$exposedVersion")
     // MySQL Connector
     implementation("mysql:mysql-connector-java:8.0.33")
+    // Coroutines
+    implementation("com.github.shynixn.mccoroutine:mccoroutine-bukkit-api:2.15.0")
+    implementation("com.github.shynixn.mccoroutine:mccoroutine-bukkit-core:2.15.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.0")
+    // Vault API
+    compileOnly("com.github.MilkBowl:VaultAPI:1.7")
 }
 
 java.toolchain.languageVersion.set(JavaLanguageVersion.of(17))

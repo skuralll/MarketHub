@@ -2,6 +2,7 @@ package com.skuralll.markethub.command
 
 import com.skuralll.markethub.ItemSerializer
 import com.skuralll.markethub.MarketHub
+import com.skuralll.markethub.gui.MainMenuGUI
 import dev.jorel.commandapi.kotlindsl.commandAPICommand
 import dev.jorel.commandapi.kotlindsl.playerExecutor
 import org.bukkit.Material
@@ -16,8 +17,6 @@ class TestCommand(plugin: MarketHub) : Command(plugin) {
         commandAPICommand("mtest") {
             playerExecutor { player, _ ->
 //                MainMenuGUI(player).open()
-                val metaStr = player.inventory.itemInMainHand.itemMeta.serialize().toString()
-                player.sendMessage(metaStr)
             }
         }
     }
