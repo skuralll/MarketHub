@@ -4,6 +4,8 @@ import com.skuralll.markethub.ItemSerializer
 import com.skuralll.markethub.MarketHub
 import com.skuralll.markethub.db.tables.MetaTable
 import com.skuralll.markethub.db.tables.ProductsTable
+import kotlinx.coroutines.delay
+import org.bukkit.Bukkit
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import org.jetbrains.exposed.sql.Database
@@ -39,7 +41,7 @@ object DBHandler {
 
     // DB operations
 
-    suspend fun addProduct(player: Player, item: ItemStack, price: Int): Boolean {
+    fun addProduct(player: Player, item: ItemStack, price: Int): Boolean {
         try {
             transaction {
                 ProductsTable.insert {

@@ -25,9 +25,7 @@ class MHubCommand(plugin: MarketHub) : Command(plugin) {
         integerArgument("価格", MIN_PRICE, MAX_PRICE)
         playerExecutor { player, args ->
             val price = args[0] as Int
-            plugin.launch {
-                Market.sell(player, price)
-            }
+            Market.sell(player, price)
         }
     }
 

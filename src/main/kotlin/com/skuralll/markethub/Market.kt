@@ -1,5 +1,6 @@
 package com.skuralll.markethub
 
+import com.github.shynixn.mccoroutine.bukkit.launch
 import com.skuralll.markethub.db.DBHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -24,20 +25,22 @@ object Market {
         }
     }
 
-    suspend fun sell(player: Player, price: Int) {
-        val item = player.inventory.itemInMainHand
-        if (item.type == Material.AIR) {
-            player.sendMessage("アイテムを持ってください")
-            return
-        }
-        val result = withContext(Dispatchers.IO) {
-            DBHandler.addProduct(player, item, price)
-        }
-        if (result) {
-            player.inventory.setItemInMainHand(null)
-            player.sendMessage("アイテムを出品しました")
-        } else {
-            player.sendMessage("アイテムの出品に失敗しました")
+    fun sell(player: Player, price: Int) {
+        plugin.launch {
+            val item = player.inventory.itemInMainHand
+            if (item.type == Material.AIR) {
+                player.sendMessage("アイテムを持ってください")
+                return@launch
+            }
+            val result = withContext(Dispatchers.IO) {
+                DBHandler.addProduct(player, item, price)
+            }
+            if (result) {
+                player.inventory.setItemInMainHand(null)
+                player.sendMessage("アイテムを出品しました")
+            } else {
+                player.sendMessage("アイテムの出品に失敗しました")
+            }
         }
     }
 
