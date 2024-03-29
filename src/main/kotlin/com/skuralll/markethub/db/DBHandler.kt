@@ -10,6 +10,8 @@ import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils.create
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
+import org.jetbrains.exposed.sql.deleteWhere
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
@@ -65,6 +67,7 @@ object DBHandler {
         }
     }
 
+    // get seller products by player id
     fun getSellerProducts(sellerId: UUID): List<Product> {
         val sellerIdStr = sellerId.toString()
         return transaction {
@@ -76,8 +79,18 @@ object DBHandler {
         }
     }
 
+    // get seller products by player
     fun getSellerProducts(seller: Player): List<Product> {
         return getSellerProducts(seller.uniqueId)
+    }
+
+    // delete product from product id
+    fun deleteProduct(productId: Int) {
+        transaction {
+            ProductsTable.deleteWhere {
+                ProductsTable.id eq productId
+            }
+        }
     }
 
 }

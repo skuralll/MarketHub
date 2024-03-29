@@ -51,5 +51,17 @@ object Market {
         }
     }
 
+    suspend fun returnProduct(player: Player, product: Product) {
+        val inventory = player.inventory
+        if (inventory.firstEmpty() == -1) {
+            player.sendMessage("インベントリがいっぱいです")
+            return
+        }
+        withContext(Dispatchers.IO) {
+            DBHandler.deleteProduct(product.id)
+        }
+        inventory.addItem(ItemSerializer.itemFrom64(product.itemStack))
+        player.sendMessage("アイテムを取り下げました")
+    }
 
 }

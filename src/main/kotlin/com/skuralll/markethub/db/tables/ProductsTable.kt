@@ -14,8 +14,6 @@ object ProductsTable : Table("products") {
     val created_at = datetime("created_at")
     val expired_at = datetime("expired_at")
     override val primaryKey = PrimaryKey(id)
-
-
 }
 
 fun ResultRow.toProduct(): Product =

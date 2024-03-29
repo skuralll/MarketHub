@@ -14,7 +14,11 @@ import xyz.xenondevs.invui.item.impl.AsyncItem
 import java.time.format.DateTimeFormatter
 import java.util.function.Supplier
 
-private class ProductItemSupplier(private val product: Product, private val isOwner: Boolean, private val extraLore: List<Component>) :
+private class ProductItemSupplier(
+    private val product: Product,
+    private val isOwner: Boolean,
+    private val extraLore: List<Component>
+) :
     Supplier<ItemProvider> {
     override fun get(): ItemProvider {
         val item = ItemSerializer.itemFrom64(product.itemStack)
@@ -43,11 +47,16 @@ private class ProductItemSupplier(private val product: Product, private val isOw
     }
 }
 
-class ProductAsyncItem(product: Product, isOwner: Boolean, extraLore: List<Component> = listOf()) :
+class ProductAsyncItem(
+    private val product: Product,
+    isOwner: Boolean,
+    extraLore: List<Component> = listOf(),
+    private val onClick: (ClickType, Player, InventoryClickEvent, Product) -> Unit = { _, _, _, _ -> }
+) :
     AsyncItem(ProductItemSupplier(product, isOwner, extraLore)) {
 
     override fun handleClick(p0: ClickType, p1: Player, p2: InventoryClickEvent) {
-
+        onClick(p0, p1, p2, product)
     }
 
 }
