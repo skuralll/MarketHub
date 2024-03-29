@@ -3,15 +3,17 @@ package com.skuralll.markethub.db
 import com.skuralll.markethub.ItemSerializer
 import com.skuralll.markethub.MarketHub
 import com.skuralll.markethub.db.tables.MetaTable
+import com.skuralll.markethub.db.tables.Product
 import com.skuralll.markethub.db.tables.ProductsTable
-import kotlinx.coroutines.delay
-import org.bukkit.Bukkit
+import com.skuralll.markethub.db.tables.toProduct
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.SchemaUtils.create
 import org.jetbrains.exposed.sql.insert
+import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
+import java.util.UUID
 
 object DBHandler {
 
@@ -61,6 +63,21 @@ object DBHandler {
             e.printStackTrace()
             return false
         }
+    }
+
+    fun getSellerProducts(sellerId: UUID): List<Product> {
+        val sellerIdStr = sellerId.toString()
+        return transaction {
+            ProductsTable.select {
+                ProductsTable.seller_id eq sellerIdStr
+            }.map {
+                it.toProduct()
+            }
+        }
+    }
+
+    fun getSellerProducts(seller: Player): List<Product> {
+        return getSellerProducts(seller.uniqueId)
     }
 
 }

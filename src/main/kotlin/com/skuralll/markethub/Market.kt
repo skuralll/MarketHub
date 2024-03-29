@@ -2,6 +2,7 @@ package com.skuralll.markethub
 
 import com.github.shynixn.mccoroutine.bukkit.launch
 import com.skuralll.markethub.db.DBHandler
+import com.skuralll.markethub.db.tables.Product
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import net.milkbowl.vault.economy.Economy
@@ -41,6 +42,12 @@ object Market {
             } else {
                 player.sendMessage("アイテムの出品に失敗しました")
             }
+        }
+    }
+
+    suspend fun getSellerProducts(player: Player): List<Product> {
+        return withContext(Dispatchers.IO) {
+            DBHandler.getSellerProducts(player)
         }
     }
 
