@@ -1,5 +1,6 @@
 package com.skuralll.markethub.gui
 
+import com.skuralll.markethub.MarketHub
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.TextColor
 import net.kyori.adventure.text.format.TextDecoration
@@ -12,12 +13,13 @@ import xyz.xenondevs.inventoryaccess.component.AdventureComponentWrapper
 import xyz.xenondevs.invui.gui.Gui
 import xyz.xenondevs.invui.item.ItemProvider
 import xyz.xenondevs.invui.item.builder.ItemBuilder
+import xyz.xenondevs.invui.item.builder.SkullBuilder
 import xyz.xenondevs.invui.item.impl.AbstractItem
 import xyz.xenondevs.invui.item.impl.CommandItem
 import xyz.xenondevs.invui.item.impl.SimpleItem
 import xyz.xenondevs.invui.window.Window
 
-class MainMenuGUI(player: Player) : GUI(player) {
+class MainMenuGUI(val plugin: MarketHub, player: Player) : GUI(player) {
     override fun open() {
 
         // sell item
@@ -33,14 +35,25 @@ class MainMenuGUI(player: Player) : GUI(player) {
             }
         }
 
+        // owning item
+        val ownItem = object : AbstractItem() {
+            override fun getItemProvider(): ItemProvider {
+                return SkullBuilder(player.uniqueId).setDisplayName("出品中のアイテム")
+            }
+
+            override fun handleClick(p0: ClickType, p1: Player, p2: InventoryClickEvent) {
+                MyItemsGUI(plugin, p1).open()
+            }
+        }
+
         val gui = Gui.normal().setStructure(
             ". . . . . . . . .",
-            ". . . . s . . . .",
+            ". . . . s . o . .",
             ". . . . . . . . ."
         ).addIngredient(
             's',
             sellItem
-        )
+        ).addIngredient('o', ownItem)
             .build()
 
         val window =

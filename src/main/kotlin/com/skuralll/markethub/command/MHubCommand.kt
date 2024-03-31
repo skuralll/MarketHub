@@ -36,12 +36,18 @@ class MHubCommand(plugin: MarketHub) : Command(plugin) {
         }
     }
 
+    private val category = subcommand("list") {
+        playerExecutor { player, _ ->
+            MyItemsGUI(plugin, player).open()
+        }
+    }
+
     override fun register() {
         commandAPICommand("mhub") {
             subcommand(sell)
             subcommand(own)
             playerExecutor { player, _ ->
-                MainMenuGUI(player).open()
+                MainMenuGUI(plugin, player).open()
             }
         }
     }

@@ -57,11 +57,15 @@ object Market {
             player.sendMessage("インベントリがいっぱいです")
             return
         }
-        withContext(Dispatchers.IO) {
+        val result = withContext(Dispatchers.IO) {
             DBHandler.deleteProduct(product.id)
         }
-        inventory.addItem(ItemSerializer.itemFrom64(product.itemStack))
-        player.sendMessage("アイテムを取り下げました")
+        if (result) {
+            inventory.addItem(ItemSerializer.itemFrom64(product.itemStack))
+            player.sendMessage("アイテムを取り下げました")
+        } else {
+            player.sendMessage("アイテムの取り下げに失敗しました")
+        }
     }
 
 }

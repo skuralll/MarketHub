@@ -47,6 +47,9 @@ object DBHandler {
 
     fun addProduct(player: Player, item: ItemStack, price: Int): Boolean {
         try {
+            if (item.type.isAir) {
+                return false
+            }
             transaction {
                 ProductsTable.insert {
                     it[ProductsTable.seller_id] = player.uniqueId.toString()
@@ -85,11 +88,18 @@ object DBHandler {
     }
 
     // delete product from product id
-    fun deleteProduct(productId: Int) {
-        transaction {
-            ProductsTable.deleteWhere {
-                ProductsTable.id eq productId
+    fun deleteProduct(productId: Int): Boolean {
+        try {
+            transaction {
+                ProductsTable.deleteWhere {
+                    ProductsTable.id eq productId
+                }
             }
+            return true
+        } catch (e: Exception) {
+            plugin.logger.warning("アイテムの取り下げに失敗しました")
+            e.printStackTrace()
+            return false
         }
     }
 
