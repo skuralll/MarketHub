@@ -51,6 +51,11 @@ object Market {
             player.sendMessage("お金が足りません")
             return
         }
+        val inventory = player.inventory
+        if (inventory.firstEmpty() == -1) {
+            player.sendMessage("インベントリがいっぱいです")
+            return
+        }
         val result = withContext(Dispatchers.IO) {
             DBHandler.deleteProduct(product.id)
         }
@@ -60,7 +65,7 @@ object Market {
                 Bukkit.getOfflinePlayer(UUID.fromString(product.sellerId)),
                 product.price.toDouble()
             )
-            player.inventory.addItem(ItemSerializer.itemFrom64(product.itemStack))
+            inventory.addItem(ItemSerializer.itemFrom64(product.itemStack))
             player.sendMessage("アイテムを購入しました")
         } else {
             player.sendMessage("アイテムの購入に失敗しました")
