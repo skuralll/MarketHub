@@ -10,7 +10,7 @@ import net.kyori.adventure.text.format.TextColor
 import net.kyori.adventure.text.format.TextDecoration
 import org.bukkit.entity.Player
 
-class MyItemsGUI(plugin: MarketHub, player: Player) : ItemListGUI(plugin, player) {
+class MyItemsGUI(plugin: MarketHub, player: Player) : AbstractItemListGUI(plugin, player) {
 
     override val title: String = "出品しているアイテム"
     override val extraLore: List<TextComponent> = listOf(

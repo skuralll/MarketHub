@@ -2,9 +2,7 @@ package com.skuralll.markethub.gui
 
 import com.skuralll.markethub.MarketHub
 import net.kyori.adventure.text.Component
-import net.kyori.adventure.text.format.TextColor
 import net.kyori.adventure.text.format.TextDecoration
-import org.bukkit.Color
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.event.inventory.ClickType
@@ -15,8 +13,6 @@ import xyz.xenondevs.invui.item.ItemProvider
 import xyz.xenondevs.invui.item.builder.ItemBuilder
 import xyz.xenondevs.invui.item.builder.SkullBuilder
 import xyz.xenondevs.invui.item.impl.AbstractItem
-import xyz.xenondevs.invui.item.impl.CommandItem
-import xyz.xenondevs.invui.item.impl.SimpleItem
 import xyz.xenondevs.invui.window.Window
 
 class MainMenuGUI(val plugin: MarketHub, player: Player) : GUI(player) {

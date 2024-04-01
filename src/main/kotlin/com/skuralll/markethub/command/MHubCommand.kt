@@ -4,7 +4,7 @@ import com.skuralll.markethub.Market
 import com.skuralll.markethub.MarketHub
 import com.skuralll.markethub.gui.MainMenuGUI
 import com.skuralll.markethub.gui.MyItemsGUI
-import com.skuralll.markethub.gui.ProductListGUI
+import com.skuralll.markethub.gui.ItemListGUI
 import dev.jorel.commandapi.kotlindsl.*
 
 
@@ -31,7 +31,7 @@ class MHubCommand(plugin: MarketHub) : Command(plugin) {
 
     private val category = subcommand("list") {
         playerExecutor { player, _ ->
-            ProductListGUI(plugin, player).open()
+            ItemListGUI(plugin, player).open()
         }
     }
 
