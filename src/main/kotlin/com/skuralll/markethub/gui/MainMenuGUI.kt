@@ -34,7 +34,7 @@ class MainMenuGUI(val plugin: MarketHub, player: Player) : GUI(player) {
         // owning item
         val ownItem = object : AbstractItem() {
             override fun getItemProvider(): ItemProvider {
-                return SkullBuilder(player.uniqueId).setDisplayName("出品中のアイテム")
+                return SkullBuilder(player.uniqueId).setDisplayName("あなたのアイテム")
             }
 
             override fun handleClick(p0: ClickType, p1: Player, p2: InventoryClickEvent) {
@@ -42,14 +42,26 @@ class MainMenuGUI(val plugin: MarketHub, player: Player) : GUI(player) {
             }
         }
 
+        // list item
+        val listItem = object : AbstractItem() {
+            override fun getItemProvider(): ItemProvider {
+                return ItemBuilder(Material.CHEST).setDisplayName("アイテム一覧")
+            }
+
+            override fun handleClick(p0: ClickType, p1: Player, p2: InventoryClickEvent) {
+                ItemListGUI(plugin, p1).open()
+            }
+        }
+
         val gui = Gui.normal().setStructure(
             ". . . . . . . . .",
-            ". . . . s . o . .",
+            ". . l . s . o . .",
             ". . . . . . . . ."
         ).addIngredient(
             's',
             sellItem
         ).addIngredient('o', ownItem)
+            .addIngredient('l', listItem)
             .build()
 
         val window =
