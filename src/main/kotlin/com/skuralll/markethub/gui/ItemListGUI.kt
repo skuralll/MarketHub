@@ -20,13 +20,13 @@ import xyz.xenondevs.invui.item.builder.ItemBuilder
 import xyz.xenondevs.invui.item.impl.SimpleItem
 import xyz.xenondevs.invui.window.Window
 
-abstract class ItemListGUI(val plugin: MarketHub, player: Player) : GUI(player) {
+abstract class ItemListGUI(protected val plugin: MarketHub, player: Player) : GUI(player) {
 
     open val title: String = "title"
     open val extraLore: List<TextComponent> = listOf()
     open val onShiftClick: (Player, Product) -> Unit = { _, _ -> }
 
-    open fun getOnClick(): (ClickType, Player, InventoryClickEvent, Product) -> Unit {
+    open suspend fun getOnClick(): (ClickType, Player, InventoryClickEvent, Product) -> Unit {
         return { clickType: ClickType, player: Player, event: InventoryClickEvent, product: Product ->
             if (clickType.isShiftClick) {
                 onShiftClick(player, product)
@@ -34,11 +34,11 @@ abstract class ItemListGUI(val plugin: MarketHub, player: Player) : GUI(player) 
         }
     }
 
-    open fun getProducts(): List<Product> {
+    open suspend fun getProducts(): List<Product> {
         return listOf()
     }
 
-    fun getItems(): List<ProductAsyncItem> {
+    suspend fun getItems(): List<ProductAsyncItem> {
         return getProducts().map {
             ProductAsyncItem(it, true, extraLore, getOnClick())
         }
