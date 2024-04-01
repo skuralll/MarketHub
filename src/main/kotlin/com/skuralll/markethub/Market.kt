@@ -78,6 +78,12 @@ object Market {
         }
     }
 
+    suspend fun getProducts(isExpired: Boolean?): List<Product> {
+        return withContext(Dispatchers.IO) {
+            DBHandler.getProducts(isExpired)
+        }
+    }
+
     suspend fun getSellerProducts(player: Player): List<Product> {
         return withContext(Dispatchers.IO) {
             DBHandler.getSellerProducts(player)

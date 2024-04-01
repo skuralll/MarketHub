@@ -23,7 +23,7 @@ class ItemListGUI(plugin: MarketHub, player: Player) :
         { player, product -> plugin.launch { Market.buy(player, product) } }
 
     override suspend fun getProducts(): List<Product> {
-        return Market.getAllProducts().filter {
+        return Market.getProducts(isExpired = false).filter {
             it.sellerId != player.uniqueId.toString()
         }
     }

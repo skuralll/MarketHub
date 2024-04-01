@@ -11,6 +11,8 @@ import org.bukkit.inventory.ItemStack
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SchemaUtils.create
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.greater
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.lessEq
 import org.jetbrains.exposed.sql.transactions.transaction
 import java.util.UUID
 
@@ -76,6 +78,29 @@ object DBHandler {
         }
     }
 
+    // get products by some conditions
+    fun getProducts(isExpired: Boolean?): List<Product> {
+        // conditions
+        // expired or not
+        val expired = if (isExpired == null) {
+            Op.TRUE
+        } else {
+            if (isExpired) {
+                ProductsTable.expired_at lessEq java.time.LocalDateTime.now()
+            } else {
+                ProductsTable.expired_at greater java.time.LocalDateTime.now()
+            }
+        }
+        // transaction
+        return transaction {
+            ProductsTable.select {
+                expired
+            }.map {
+                it.toProduct()
+            }
+        }
+    }
+
     // get seller products by player id
     fun getSellerProducts(sellerId: UUID): List<Product> {
         val sellerIdStr = sellerId.toString()
@@ -106,6 +131,17 @@ object DBHandler {
             plugin.logger.warning("アイテムの取り下げに失敗しました")
             e.printStackTrace()
             return false
+        }
+    }
+
+    // get expired products
+    fun getExpiredProducts(): List<Product> {
+        return transaction {
+            ProductsTable.select {
+                ProductsTable.expired_at lessEq java.time.LocalDateTime.now()
+            }.map {
+                it.toProduct()
+            }
         }
     }
 
