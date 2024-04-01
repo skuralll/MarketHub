@@ -8,12 +8,9 @@ import com.skuralll.markethub.db.tables.ProductsTable
 import com.skuralll.markethub.db.tables.toProduct
 import org.bukkit.entity.Player
 import org.bukkit.inventory.ItemStack
-import org.jetbrains.exposed.sql.Database
+import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SchemaUtils.create
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
-import org.jetbrains.exposed.sql.deleteWhere
-import org.jetbrains.exposed.sql.insert
-import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
 import java.util.UUID
 
@@ -67,6 +64,15 @@ object DBHandler {
             plugin.logger.warning("アイテムの出品に失敗しました")
             e.printStackTrace()
             return false
+        }
+    }
+
+    // get all products
+    fun getAllProducts(): List<Product> {
+        return transaction {
+            ProductsTable.selectAll().map {
+                it.toProduct()
+            }
         }
     }
 

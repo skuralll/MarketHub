@@ -6,6 +6,7 @@ import com.skuralll.markethub.Market
 import com.skuralll.markethub.MarketHub
 import com.skuralll.markethub.gui.MainMenuGUI
 import com.skuralll.markethub.gui.MyItemsGUI
+import com.skuralll.markethub.gui.ProductListGUI
 import dev.jorel.commandapi.CommandAPICommand
 import dev.jorel.commandapi.kotlindsl.*
 import org.bukkit.Material
@@ -38,7 +39,7 @@ class MHubCommand(plugin: MarketHub) : Command(plugin) {
 
     private val category = subcommand("list") {
         playerExecutor { player, _ ->
-            MyItemsGUI(plugin, player).open()
+            ProductListGUI(plugin, player).open()
         }
     }
 
@@ -46,6 +47,7 @@ class MHubCommand(plugin: MarketHub) : Command(plugin) {
         commandAPICommand("mhub") {
             subcommand(sell)
             subcommand(own)
+            subcommand(category)
             playerExecutor { player, _ ->
                 MainMenuGUI(plugin, player).open()
             }

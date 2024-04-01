@@ -1,6 +1,7 @@
 package com.skuralll.markethub.gui.items
 
 import com.skuralll.markethub.ItemSerializer
+import com.skuralll.markethub.Market
 import com.skuralll.markethub.db.tables.Product
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.TextColor
@@ -27,6 +28,7 @@ private class ProductItemSupplier(
         // generate product info lore
         val baseInfoLore = mutableListOf<Component>()
         baseInfoLore.add(Component.text(" "))
+        baseInfoLore.add(getLoreComponent("値段: ${product.price}${Market.economy.currencyNamePlural()}"))
         if (isOwner) baseInfoLore.add(getLoreComponent("出品者: ${product.sellerName}"))
         baseInfoLore.add(getLoreComponent("出品日: ${product.createdAt.format(dtFormatter)}"))
         baseInfoLore.add(getLoreComponent("有効期限: ${product.expiredAt.format(dtFormatter)}"))

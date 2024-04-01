@@ -9,11 +9,12 @@ import net.milkbowl.vault.economy.Economy
 import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.entity.Player
+import java.util.UUID
 
 object Market {
 
     private lateinit var plugin: MarketHub
-    private lateinit var economy: Economy
+    public lateinit var economy: Economy
 
     fun open(plugin: MarketHub) {
         this.plugin = plugin
@@ -45,6 +46,33 @@ object Market {
         }
     }
 
+    suspend fun buy(player: Player, product: Product) {
+        if (!economy.has(player, product.price.toDouble())) {
+            player.sendMessage("お金が足りません")
+            return
+        }
+        val result = withContext(Dispatchers.IO) {
+            DBHandler.deleteProduct(product.id)
+        }
+        if (result) {
+            economy.withdrawPlayer(player, product.price.toDouble())
+            economy.depositPlayer(
+                Bukkit.getOfflinePlayer(UUID.fromString(product.sellerId)),
+                product.price.toDouble()
+            )
+            player.inventory.addItem(ItemSerializer.itemFrom64(product.itemStack))
+            player.sendMessage("アイテムを購入しました")
+        } else {
+            player.sendMessage("アイテムの購入に失敗しました")
+        }
+    }
+
+    suspend fun getAllProducts(): List<Product> {
+        return withContext(Dispatchers.IO) {
+            DBHandler.getAllProducts()
+        }
+    }
+
     suspend fun getSellerProducts(player: Player): List<Product> {
         return withContext(Dispatchers.IO) {
             DBHandler.getSellerProducts(player)
@@ -67,5 +95,6 @@ object Market {
             player.sendMessage("アイテムの取り下げに失敗しました")
         }
     }
+
 
 }

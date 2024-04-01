@@ -21,28 +21,29 @@ import xyz.xenondevs.invui.item.builder.ItemBuilder
 import xyz.xenondevs.invui.item.impl.SimpleItem
 import xyz.xenondevs.invui.window.Window
 
-class MyItemsGUI(private val plugin: MarketHub, player: Player) : GUI(player) {
+class ProductListGUI(private val plugin: MarketHub, player: Player) : GUI(player) {
     override fun open() {
         plugin.launch {
             // create items
             val extraLore = listOf(
-                Component.text("Shift+クリックで取り下げる")
+                Component.text("Shift+クリックで購入")
                     .decoration(TextDecoration.ITALIC, false)
-                    .color(TextColor.color(255, 85, 85))
+                    .color(TextColor.color(85, 255, 85))
             )
             val onClick =
                 { clickType: ClickType, player: Player, event: InventoryClickEvent, product: Product ->
                     if (clickType.isShiftClick) {
                         plugin.launch {
-                            Market.returnProduct(player, product)
-
-//                            player.inventory.close()
-//                            MyItemsGUI(plugin, player).open()
+                            Market.buy(player, product)
+                            player.inventory.close()
+                            ProductListGUI(plugin, player).open()
                         }
                     }
                 }
-            val items = Market.getSellerProducts(player).map {
-                ProductAsyncItem(it, false, extraLore, onClick)
+            val items = Market.getAllProducts().filter {
+                it.sellerId != player.uniqueId.toString()
+            }.map {
+                ProductAsyncItem(it, true, extraLore, onClick)
             }
 
             val border =
@@ -68,7 +69,7 @@ class MyItemsGUI(private val plugin: MarketHub, player: Player) : GUI(player) {
                 Window.single()
                     .setTitle(
                         AdventureComponentWrapper(
-                            Component.text("出品しているアイテム").decorate(TextDecoration.BOLD)
+                            Component.text("出品中のアイテム").decorate(TextDecoration.BOLD)
                         )
                     )
                     .setGui(gui)
