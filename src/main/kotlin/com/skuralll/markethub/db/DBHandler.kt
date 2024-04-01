@@ -96,12 +96,12 @@ object DBHandler {
     // delete product from product id
     fun deleteProduct(productId: Int): Boolean {
         try {
-            transaction {
-                ProductsTable.deleteWhere {
+            val result = transaction {
+                return@transaction ProductsTable.deleteWhere {
                     ProductsTable.id eq productId
-                }
+                } > 0
             }
-            return true
+            return result
         } catch (e: Exception) {
             plugin.logger.warning("アイテムの取り下げに失敗しました")
             e.printStackTrace()

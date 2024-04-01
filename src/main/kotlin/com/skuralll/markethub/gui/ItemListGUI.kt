@@ -10,19 +10,22 @@ import net.kyori.adventure.text.format.TextColor
 import net.kyori.adventure.text.format.TextDecoration
 import org.bukkit.entity.Player
 
-class MyItemsGUI(plugin: MarketHub, player: Player) : AbstractItemListGUI(plugin, player) {
+class ItemListGUI(plugin: MarketHub, player: Player) :
+    AbstractItemListGUI(plugin, player) {
 
-    override val title: String = "出品しているアイテム"
+    override val title: String = "出品中のアイテム"
     override val extraLore: List<TextComponent> = listOf(
-        Component.text("Shift+クリックで取り下げる")
+        Component.text("Shift+クリックで購入")
             .decoration(TextDecoration.ITALIC, false)
-            .color(TextColor.color(255, 85, 85))
+            .color(TextColor.color(85, 255, 85))
     )
     override val onShiftClick: (Player, Product) -> Unit =
-        { player, product -> plugin.launch { Market.returnProduct(player, product) } }
+        { player, product -> plugin.launch { Market.buy(player, product) } }
 
     override suspend fun getProducts(): List<Product> {
-        return Market.getSellerProducts(player)
+        return Market.getAllProducts().filter {
+            it.sellerId != player.uniqueId.toString()
+        }
     }
 
 }

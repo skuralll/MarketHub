@@ -1,14 +1,13 @@
 package com.skuralll.markethub.gui
 
 import com.github.shynixn.mccoroutine.bukkit.launch
-import com.skuralll.markethub.Market
 import com.skuralll.markethub.MarketHub
 import com.skuralll.markethub.db.tables.Product
 import com.skuralll.markethub.gui.items.BackItem
 import com.skuralll.markethub.gui.items.ForwardItem
 import com.skuralll.markethub.gui.items.ProductAsyncItem
 import net.kyori.adventure.text.Component
-import net.kyori.adventure.text.format.TextColor
+import net.kyori.adventure.text.TextComponent
 import net.kyori.adventure.text.format.TextDecoration
 import org.bukkit.Material
 import org.bukkit.entity.Player
@@ -21,31 +20,33 @@ import xyz.xenondevs.invui.item.builder.ItemBuilder
 import xyz.xenondevs.invui.item.impl.SimpleItem
 import xyz.xenondevs.invui.window.Window
 
-class ProductListGUI(private val plugin: MarketHub, player: Player) : GUI(player) {
+abstract class AbstractItemListGUI(protected val plugin: MarketHub, player: Player) : GUI(player) {
+
+    open val title: String = "title"
+    open val extraLore: List<TextComponent> = listOf()
+    open val onShiftClick: (Player, Product) -> Unit = { _, _ -> }
+
+    open suspend fun getOnClick(): (ClickType, Player, InventoryClickEvent, Product) -> Unit {
+        return { clickType: ClickType, player: Player, event: InventoryClickEvent, product: Product ->
+            if (clickType.isShiftClick) {
+                onShiftClick(player, product)
+            }
+        }
+    }
+
+    open suspend fun getProducts(): List<Product> {
+        return listOf()
+    }
+
+    suspend fun getItems(): List<ProductAsyncItem> {
+        return getProducts().map {
+            ProductAsyncItem(it, true, extraLore, getOnClick())
+        }
+    }
+
     override fun open() {
         plugin.launch {
-            // create items
-            val extraLore = listOf(
-                Component.text("Shift+クリックで購入")
-                    .decoration(TextDecoration.ITALIC, false)
-                    .color(TextColor.color(85, 255, 85))
-            )
-            val onClick =
-                { clickType: ClickType, player: Player, event: InventoryClickEvent, product: Product ->
-                    if (clickType.isShiftClick) {
-                        plugin.launch {
-                            Market.buy(player, product)
-                            player.inventory.close()
-                            ProductListGUI(plugin, player).open()
-                        }
-                    }
-                }
-            val items = Market.getAllProducts().filter {
-                it.sellerId != player.uniqueId.toString()
-            }.map {
-                ProductAsyncItem(it, true, extraLore, onClick)
-            }
-
+            // border item
             val border =
                 SimpleItem(ItemBuilder(Material.GRAY_STAINED_GLASS_PANE).setDisplayName("§r"))
 
@@ -61,7 +62,7 @@ class ProductListGUI(private val plugin: MarketHub, player: Player) : GUI(player
                 .addIngredient('<', BackItem())
                 .addIngredient('>', ForwardItem())
                 .addIngredient('#', border)
-                .setContent(items)
+                .setContent(getItems())
                 .build()
 
             // open gui
@@ -69,7 +70,7 @@ class ProductListGUI(private val plugin: MarketHub, player: Player) : GUI(player
                 Window.single()
                     .setTitle(
                         AdventureComponentWrapper(
-                            Component.text("出品中のアイテム").decorate(TextDecoration.BOLD)
+                            Component.text(title).decorate(TextDecoration.BOLD)
                         )
                     )
                     .setGui(gui)
