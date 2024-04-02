@@ -2,6 +2,7 @@ package com.skuralll.markethub.db
 
 import com.skuralll.markethub.ItemSerializer
 import com.skuralll.markethub.MarketHub
+import com.skuralll.markethub.config.ConfigHandler
 import com.skuralll.markethub.db.tables.MetaTable
 import com.skuralll.markethub.db.tables.Product
 import com.skuralll.markethub.db.tables.ProductsTable
@@ -27,13 +28,18 @@ object DBHandler {
     fun connect(plugin: MarketHub) {
         this.plugin = plugin
         // connection
-        Database.connect(
-            "jdbc:mysql://mysql/markethub",
-            driver = "com.mysql.jdbc.Driver",
-            user = "root",
-            password = "mysql"
-        )
-        createTables()
+        try {
+            Database.connect(
+                "jdbc:mysql://mysql/markethub",
+                driver = "com.mysql.jdbc.Driver",
+                user = ConfigHandler.config.mysql.user,
+                password = ConfigHandler.config.mysql.password
+            )
+            createTables()
+        } catch (e: Exception) {
+            plugin.logger.warning("DB接続に失敗しました、設定ファイルを確認してください。")
+            plugin.server.pluginManager.disablePlugin(plugin)
+        }
     }
 
     fun createTables() {

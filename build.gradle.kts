@@ -37,6 +37,8 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.8.0")
     // Vault API
     compileOnly("com.github.MilkBowl:VaultAPI:1.7")
+    // Config API
+    implementation("de.exlll:configlib-yaml:4.5.0")
 }
 
 java.toolchain.languageVersion.set(JavaLanguageVersion.of(17))
