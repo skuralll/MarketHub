@@ -55,7 +55,7 @@ class MainMenuGUI(val plugin: MarketHub, player: Player) : GUI(player) {
 
         val gui = Gui.normal().setStructure(
             ". . . . . . . . .",
-            ". . l . s . o . .",
+            ". . s . l . o . .",
             ". . . . . . . . ."
         ).addIngredient(
             's',
