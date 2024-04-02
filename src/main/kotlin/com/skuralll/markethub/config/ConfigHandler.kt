@@ -27,6 +27,6 @@ object ConfigHandler {
     }
 
     private fun load() {
-        YamlConfigurations.load(configFile, BaseConfig::class.java)
+        config = YamlConfigurations.load(configFile, BaseConfig::class.java)
     }
 }
