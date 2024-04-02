@@ -9,6 +9,7 @@ import com.skuralll.markethub.gui.items.ProductAsyncItem
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.TextComponent
 import net.kyori.adventure.text.format.TextDecoration
+import org.bukkit.Bukkit
 import org.bukkit.Material
 import org.bukkit.entity.Player
 import org.bukkit.event.inventory.ClickType
@@ -44,6 +45,15 @@ abstract class AbstractItemListGUI(protected val plugin: MarketHub, player: Play
         }
     }
 
+    open fun getCloseHandler(): Runnable {
+        return Runnable {
+            // すぐに新しいGUIを開くと現在のGUIを閉じる処理と重なるため、1tick後に新しいGUIを開く
+            Bukkit.getScheduler().runTaskLater(plugin, Runnable {
+                MainMenuGUI(plugin, player).open()
+            }, 1L)
+        }
+    }
+
     override fun open() {
         plugin.launch {
             // border item
@@ -74,6 +84,7 @@ abstract class AbstractItemListGUI(protected val plugin: MarketHub, player: Play
                         )
                     )
                     .setGui(gui)
+                    .addCloseHandler(getCloseHandler())
                     .setViewer(player).build()
             window.open()
         }
